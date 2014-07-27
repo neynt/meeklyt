@@ -1,0 +1,22 @@
+{
+  "name": "meeklyt",
+  "version": "0.0.0",
+  "description": "database of youtube videos with, or that had, zero dislikes",
+  "main": "web.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@heroku.com:meeklyt.git"
+  },
+  "author": "neynt",
+  "license": "no it's all mine bro",
+  "dependencies": {
+    "express": "^4.7.1",
+    "logfmt": "^1.1.2"
+  },
+  "engines": {
+    "node": "0.10.x"
+  }
+}
