@@ -13,8 +13,14 @@
   "author": "neynt",
   "license": "no it's all mine bro",
   "dependencies": {
+    "body-parser": "^1.5.2",
     "express": "^4.7.1",
-    "logfmt": "^1.1.2"
+    "jade": "^1.5.0",
+    "logfmt": "^1.1.2",
+    "mongodb": "^1.4.7",
+    "mongoose": "^3.8.14",
+    "request": "^2.39.0",
+    "stylus": "^0.47.3"
   },
   "engines": {
     "node": "0.10.x"

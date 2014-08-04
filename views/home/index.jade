@@ -1,0 +1,13 @@
+extends ../layout
+
+block content
+  h1 youtube videos with zero dislikes
+  h2 a database of purity
+  each video in videos
+    div.video
+      h3= video.title
+      p= 'likes: ' + video.likes + ' dislikes: ' + video.dislikes
+  p submit a new one?
+  form(action='/ret' method='post')
+    input(type='text' name='vid')
+    input(type='submit')
