@@ -7,7 +7,7 @@ block content
     div.video
       h3= video.title
       p= 'likes: ' + video.likes + ' dislikes: ' + video.dislikes
-  p submit a new one?
+  h2 submit a new one?
   form(action='/ret' method='post')
-    input(type='text' name='vid')
+    input(type='text' name='vid' placeholder='url here please')
     input(type='submit')
