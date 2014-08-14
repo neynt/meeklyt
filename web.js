@@ -3,6 +3,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var logfmt = require('logfmt');
 var mongoose = require('mongoose');
+var moment = require('moment');
 
 var mongoUri = process.env.MONGOHQ_URL
   || 'mongodb://localhost/mydb';
@@ -32,8 +33,9 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 
 app.get('/', function(req, res) {
-  Video.find({})
+  Video.find()
   .where('dislikes').equals(0)
+  .where('valid').equals(true)
   .sort('-pure_likes')
   .exec(function (err, videos) {
     if (err) console.error(err);
@@ -41,7 +43,7 @@ app.get('/', function(req, res) {
   });
 });
 app.get('/hall-of-fame', function(req, res) {
-  Video.find({})
+  Video.find()
   .where('dislikes').gt(0)
   .sort('-pure_likes')
   .exec(function (err, videos) {
@@ -57,6 +59,28 @@ app.route('/ret')
   }
   res.redirect('/');
 });
+
+// Update videos every so often
+setInterval(function() {
+  console.log("Starting video update...")
+  Video.find()
+  .where('dislikes').equals(0)
+  .exec(function (err, videos) {
+    if (err) console.error(err);
+    videos.forEach(function(v) {
+      var update_time = 60000;
+      var time_from = new Date() - v.last_update;
+      console.log("vid time is " + time_from);
+      if (time_from >= update_time) {
+        console.log("starting update of video " + v._id);
+        update_video(v._id);
+      }
+      else {
+        console.log("skipping video " + v._id);
+      }
+    }); 
+  });
+}, 10000);
 
 // Start everything
 var port = Number(process.env.PORT || 5000);

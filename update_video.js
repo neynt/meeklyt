@@ -39,16 +39,17 @@ jobs.process('new job', function(job, done) {
 
   request(url, function(error, response, body) {
     if (!error && response.statusCode == 200) {
-      console.log(body);
+      //console.log(body);
       var stuff = JSON.parse(body);
 
       if (stuff.items.length > 0) {
         var v = stuff.items[0];
         var cur_vid = {};
-//cur_vid._id = vid;
         cur_vid.title = v.snippet.title;
         cur_vid.likes = v.statistics.likeCount;
         cur_vid.dislikes = v.statistics.dislikeCount;
+        cur_vid.last_update = new Date();
+        cur_vid.valid = true;
         if (cur_vid.dislikes == 0) {
           cur_vid.pure_likes = cur_vid.likes;
         }
@@ -56,8 +57,16 @@ jobs.process('new job', function(job, done) {
           console.error(err);
         });
 
-        console.log("jitsu wa, i really like " + cur_vid.likes);
+        console.log("Video had " + cur_vid.likes + " likes");
         done();
+      }
+      else {
+        var cur_vid = {};
+        cur_vid.valid = false;
+        Video.update({_id: vid}, cur_vid, {upsert: true}, function (err) {
+          console.error(err);
+        });
+        done('video is dead');
       }
     }
     done('failed to retrieve video');
