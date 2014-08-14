@@ -32,9 +32,21 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 
 app.get('/', function(req, res) {
-  Video.find({}).sort('-pure_likes').exec(function (err, videos) {
+  Video.find({})
+  .where('dislikes').equals(0)
+  .sort('-pure_likes')
+  .exec(function (err, videos) {
     if (err) console.error(err);
-    res.render('home', { videos: videos });
+    res.render('home', { title: 'Home', videos: videos });
+  });
+});
+app.get('/hall-of-fame', function(req, res) {
+  Video.find({})
+  .where('dislikes').gt(0)
+  .sort('-pure_likes')
+  .exec(function (err, videos) {
+    if (err) console.error(err);
+    res.render('home', { title: 'Hall of Fame', videos: videos });
   });
 });
 app.route('/ret')
