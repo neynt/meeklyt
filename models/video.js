@@ -7,7 +7,7 @@ var VideoSchema = mongoose.Schema({
   pure_likes: Number,
   likes: Number,
   dislikes: Number,
-  last_update: {type: Date, default: function() { return Date(0); }},
+  last_update: {type: Date, default: function() { return new Date(0); }},
   valid: {type: Boolean, default: function() { return true; }}
 });
 

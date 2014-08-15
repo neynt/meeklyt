@@ -17,10 +17,10 @@ function update_video(vid) {
 
   job
     .on('complete', function() {
-      console.log('Updating video ', vid, ' complete');
+      console.log('Job for ' + vid + ' complete');
     })
     .on('failed', function() {
-      console.log('Updating video ', vid, ' failed');
+      console.log('Job for ' + vid + ' failed');
     })
 
   job.save();
@@ -35,7 +35,7 @@ jobs.process('new job', function(job, done) {
   url += '&id=' + vid;
   url += '&key=' + process.env.GOOGLE_API_KEY;
 
-  console.log("Muh url is " + url);
+  console.log("Making API call for video " + vid);
 
   request(url, function(error, response, body) {
     if (!error && response.statusCode == 200) {
@@ -54,17 +54,16 @@ jobs.process('new job', function(job, done) {
           cur_vid.pure_likes = cur_vid.likes;
         }
         Video.update({_id: vid}, cur_vid, {upsert: true}, function (err) {
-          console.error(err);
+          if (err) console.error('err: ' + err);
         });
 
-        console.log("Video had " + cur_vid.likes + " likes");
         done();
       }
       else {
         var cur_vid = {};
         cur_vid.valid = false;
         Video.update({_id: vid}, cur_vid, {upsert: true}, function (err) {
-          console.error(err);
+          if (err) console.error('dead video: ' + err);
         });
         done('video is dead');
       }

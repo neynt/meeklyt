@@ -45,10 +45,11 @@ app.get('/', function(req, res) {
 app.get('/hall-of-fame', function(req, res) {
   Video.find()
   .where('dislikes').gt(0)
+  .where('pure_likes').gt(0)
   .sort('-pure_likes')
   .exec(function (err, videos) {
     if (err) console.error(err);
-    res.render('home', { title: 'Hall of Fame', videos: videos });
+    res.render('hof', { title: 'Hall of Fame', videos: videos });
   });
 });
 app.route('/ret')
@@ -62,25 +63,26 @@ app.route('/ret')
 
 // Update videos every so often
 setInterval(function() {
-  console.log("Starting video update...")
+  console.log("Checking videos for needed updates...")
   Video.find()
+  .where('valid').equals(true)
   .where('dislikes').equals(0)
   .exec(function (err, videos) {
     if (err) console.error(err);
     videos.forEach(function(v) {
-      var update_time = 60000;
+      var update_time = 600000;
       var time_from = new Date() - v.last_update;
-      console.log("vid time is " + time_from);
+      console.log("vid time for " + v._id + " is " + time_from);
       if (time_from >= update_time) {
-        console.log("starting update of video " + v._id);
+        console.log("Adding job to update video " + v._id);
         update_video(v._id);
       }
       else {
-        console.log("skipping video " + v._id);
+        //console.log("skipping video " + v._id);
       }
     }); 
   });
-}, 10000);
+}, 60000);
 
 // Start everything
 var port = Number(process.env.PORT || 5000);

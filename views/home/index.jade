@@ -1,14 +1,15 @@
 extends ../layout
 
 block content
-  h2 submit a new one?
+  h2 Submit a new one?
   form(role='form' action='/ret' method='post')
     .form-group
       label(for='vid') URL
-      input#vid.form-control(type='text' name='vid' placeholder='url here please')
+      input#vid.form-control(type='text' name='vid' placeholder='URL here please')
     input.btn.btn-default(type='submit')
+    p.help-block It will take a few seconds for your video to appear.
   each video in videos
     div.video
       a(href='https://www.youtube.com/watch?v=' + video._id)
         h3= video.title
-      p= 'likes: ' + video.likes + ' dislikes: ' + video.dislikes + ' likes before first dislike: ' + video.pure_likes
+      p= video.likes + ' likes and zero dislikes'
