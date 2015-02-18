@@ -6,10 +6,11 @@ block content
     .form-group
       label(for='vid') URL
       input#vid.form-control(type='text' name='vid' placeholder='URL here please')
-    input.btn.btn-default(type='submit')
+    input.btn.btn-default(type='submit' value='Submit video')
     p.help-block It will take a few seconds for your video to appear.
   each video in videos
     div.video
-      a(href='https://www.youtube.com/watch?v=' + video._id)
-        h3= video.title
+      a(href='#')
+        h3 [title hidden]
       p= video.likes + ' likes and zero dislikes'
+      p= 'published in ' + ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"][video.publishedAt.getMonth()] + ' ' + video.publishedAt.getFullYear() + ', ' + video.viewRange + ' views'
