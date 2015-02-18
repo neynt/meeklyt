@@ -48,8 +48,18 @@ jobs.process('new job', function(job, done) {
         cur_vid.title = v.snippet.title;
         cur_vid.likes = v.statistics.likeCount;
         cur_vid.dislikes = v.statistics.dislikeCount;
+        cur_vid.viewCount = v.statistics.viewCount;
+
+        var exp = Math.floor(Math.log(cur_vid.viewCount)/Math.LN10);
+        if (exp >= 4) exp -= 1;
+        var r = Math.pow(10, exp);
+        var lower = Math.floor(cur_vid.viewCount/r)*r;
+        cur_vid.viewRange = lower + '+';
+
+        cur_vid.publishedAt = v.snippet.publishedAt;
         cur_vid.last_update = new Date();
         cur_vid.valid = true;
+
         if (cur_vid.dislikes == 0) {
           cur_vid.pure_likes = cur_vid.likes;
         }
